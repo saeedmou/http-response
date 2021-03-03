@@ -7,9 +7,6 @@ use PHPUnit\Framework\TestCase;
 class PublicInterfaceTest extends TestCase
 {
 
-    use AdditionalAssertions;
-
-
     public function testConstructTheNewClassInstanse(): void
     {
         $this->assertInstanceOf(
