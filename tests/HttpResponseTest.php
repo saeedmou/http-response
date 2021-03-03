@@ -1,10 +1,9 @@
-<?php
-declare (strict_types = 1);
-
-use Saeedmou\HttpResponse\HttpResponse;
+<?php declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
+use Saeedmou\HttpResponse\HttpResponse;
 
-final class PublicInterfaceTest extends TestCase
+
+final class HttpResponseTest extends TestCase
 {
 
     public function testConstructTheNewClassInstanse(): void
@@ -15,7 +14,6 @@ final class PublicInterfaceTest extends TestCase
         );
     }
 
-    
 }
 
 
