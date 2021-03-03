@@ -1,0 +1,23 @@
+{
+    "name": "saeedmou/http-response",
+    "description": "A Composer PHP Library for managing http responses.",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "license": "GPL-3.0-or-Later",
+    "authors": [
+        {
+            "name": "saeedmou",
+            "email": "saeed.mousavian@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Saeedmou\\HttpResponse\\":"src"
+        }
+        
+    }
+}
