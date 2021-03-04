@@ -7,8 +7,9 @@ class HttpResponse
     public $message = "";
     public $data = null;
     public $exit = true;
+    public $apiVersion="0";
 
-    public function __construct(bool $status = false, string $message = "",  $data = null, bool $exit = true)
+    public function __construct(bool $status = false, string $message = "", $data = null,  bool $exit = true)
     {
         $this->status = $status;
         $this->message = $message;
@@ -18,7 +19,7 @@ class HttpResponse
         //instantiate public child inside parent
     }
 
-    public function setResponse(bool $status = false, string $message = "",  $data = null, bool $exit = true)
+    public function setResponseParameters(bool $status = false, string $message = "", $data = null, bool $exit = true)
     {
         $this->status = $status;
         $this->message = $message;
@@ -27,12 +28,23 @@ class HttpResponse
         return $this;
     }
 
-    public function jsonCORSHeaders(): void
+    public function setResponseArray($response, bool $exit = true)
     {
-        $this->setOrigin("*");
+        $this->status = $response["status"];
+        $this->message = $response["message"];
+        $this->data = $response["data"];
+        $this->exit = $exit;
+        return $this;
+    }
+
+    public function sendHeaders($output="json",$CORS=true): void
+    {
+        if($CORS){
+            $this->setOrigin("*");
+        }
         $this->setAllowMethods();
         $this->setAllowHeaders();
-        $this->setContentType();
+        $this->setContentType($output);
         $this->setNoCache();
         $this->sendOK();
     }
@@ -42,9 +54,17 @@ class HttpResponse
         header("Access-Control-Allow-Origin: $origin");
     }
 
-    public function setAllowMethods()
+    public function setAllowMethods(bool $get = true, bool $post = true, bool $put = false, bool $delete = false,bool $options = true, bool $head = true)
     {
-        header("Access-Control-Allow-Methods:  GET, PUT, DELETE, POST, OPTIONS, HEAD");
+        $methods=[];
+        ($get)?$methods[]="GET":$methods=$methods;
+        ($post)?$methods[]="POST":$methods=$methods;
+        ($options)?$methods[]="OPTIONS":$methods=$methods;
+        ($head)?$methods[]="HEAD":$methods=$methods;
+        ($put)?$methods[]="PUT":$methods=$methods;
+        ($delete)?$methods[]="DELETE":$methods=$methods;
+        $methodesStr= implode(", ",$methods);
+        header("Access-Control-Allow-Methods:  $methodesStr");
     }
 
     public function setAllowHeaders()
@@ -105,8 +125,8 @@ class HttpResponse
             flush();
         }
 
-        if ($exit) {
-            // exit();
+        if ($this->exit) {
+            exit();
         }
         return;
     }
