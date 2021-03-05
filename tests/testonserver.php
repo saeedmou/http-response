@@ -14,5 +14,9 @@ $array=array(
 );
 $httpResponse->setResponseArray($array);
 
-$httpResponse->responseJson(true);
+// $httpResponse->sendJson(true);
+$httpResponse->sendJsonAsFile("my.json");
+// $content = file_get_contents("./files/sample.txt");
+// $httpResponse->sendContentAsFile($content,"new-text.txt");
+// echo 
 // var_dump($httpResponse);
