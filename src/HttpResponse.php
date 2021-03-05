@@ -100,7 +100,7 @@ class HttpResponse
         }
     }
 
-    public function responseJson(bool $compressed = false)
+    public function sendJson(bool $compressed = false)
     {
         $outputArray =
         array(
@@ -152,35 +152,37 @@ class HttpResponse
         exit();
     }
 
-    public function responseJsonAsFile($content, $fileName)
+    public function sendJsonAsFile($fileName)
     {
+        $outputArray =
+        array(
+            "status" => $this->status,
+            "message" => $this->message,
+            "data" => $this->data,
+        );
+        $content=json_encode($outputArray);
         ob_get_clean();
         header("Content-Type: application/json; charset=UTF-8");
         header("Content-Transfer-Encoding: Binary");
         header("Content-disposition: attachment; filename=\"" . $fileName . "\"");
         header('Content-Length: ' . (function_exists('mb_strlen') ? mb_strlen($content, '8bit') : strlen($content)));
-        ob_clean();
-        flush();
         echo $content;
+        flush();
+        ob_clean();
         exit();
     }
 
-    public function responseFile($content, $fileName)
+    public function sendContentAsFile($content, $fileName)
     {
         ob_get_clean();
-        // header("Expires: on, 01 Jan 1970 00:00:00 GMT");
-        // header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-        // header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-        // header("Cache-Control: post-check=0, pre-check=0", false);
-        // header("Pragma: no-cache");
         $this->setNoCache();
         header('Content-Type: application/octet-stream');
         header("Content-Transfer-Encoding: Binary");
         header('Content-Length: ' . (function_exists('mb_strlen') ? mb_strlen($content, '8bit') : strlen($content)));
         header("Content-disposition: attachment; filename=\"" . $fileName . "\"");
-        ob_clean();
-        flush();
         echo $content;
+        flush();
+        ob_clean();
         exit();
     }
 
