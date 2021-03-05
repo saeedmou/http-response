@@ -65,7 +65,7 @@ $httpResponse->setResponseArray($array);
 
 now send the data as json
 ```php
-$httpResponse->responseJson(true);
+$httpResponse->sendJson(true);
 ```
 
 and output will be like this
@@ -102,4 +102,14 @@ Last-Modified: Thu, 04 Mar 2021 14:30:06 GMT
 Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 Cache-Control: post-check=0, pre-check=0
 Pragma: no-cache
+```
+
+the content also could be transfered as a json file
+```php
+$httpResponse->sendJsonAsFile("myFile.json");
+```
+
+and output will be downloaded as "myFile.json" with the following content
+```json
+{"status":true,"message":"Test","data":["root",{"data1":null,"data2":"test","data3":66}]}
 ```
