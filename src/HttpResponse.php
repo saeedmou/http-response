@@ -7,9 +7,9 @@ class HttpResponse
     public $message = "";
     public $data = null;
     public $exit = true;
-    public $apiVersion="0";
+    public $apiVersion = "0";
 
-    public function __construct(bool $status = false, string $message = "", $data = null,  bool $exit = true)
+    public function __construct(bool $status = false, string $message = "", $data = null, bool $exit = true)
     {
         $this->status = $status;
         $this->message = $message;
@@ -37,9 +37,9 @@ class HttpResponse
         return $this;
     }
 
-    public function sendHeaders($output="json",$CORS=true): void
+    public function sendHeaders($output = "json", $CORS = true): void
     {
-        if($CORS){
+        if ($CORS) {
             $this->setOrigin("*");
         }
         $this->setAllowMethods();
@@ -54,16 +54,16 @@ class HttpResponse
         header("Access-Control-Allow-Origin: $origin");
     }
 
-    public function setAllowMethods(bool $get = true, bool $post = true, bool $put = false, bool $delete = false,bool $options = true, bool $head = true)
+    public function setAllowMethods(bool $get = true, bool $post = true, bool $put = false, bool $delete = false, bool $options = true, bool $head = true)
     {
-        $methods=[];
-        ($get)?$methods[]="GET":$methods=$methods;
-        ($post)?$methods[]="POST":$methods=$methods;
-        ($options)?$methods[]="OPTIONS":$methods=$methods;
-        ($head)?$methods[]="HEAD":$methods=$methods;
-        ($put)?$methods[]="PUT":$methods=$methods;
-        ($delete)?$methods[]="DELETE":$methods=$methods;
-        $methodesStr= implode(", ",$methods);
+        $methods = [];
+        ($get) ? $methods[] = "GET" : $methods = $methods;
+        ($post) ? $methods[] = "POST" : $methods = $methods;
+        ($options) ? $methods[] = "OPTIONS" : $methods = $methods;
+        ($head) ? $methods[] = "HEAD" : $methods = $methods;
+        ($put) ? $methods[] = "PUT" : $methods = $methods;
+        ($delete) ? $methods[] = "DELETE" : $methods = $methods;
+        $methodesStr = implode(", ", $methods);
         header("Access-Control-Allow-Methods:  $methodesStr");
     }
 
@@ -160,7 +160,7 @@ class HttpResponse
             "message" => $this->message,
             "data" => $this->data,
         );
-        $content=json_encode($outputArray);
+        $content = json_encode($outputArray);
         ob_get_clean();
         header("Content-Type: application/json; charset=UTF-8");
         header("Content-Transfer-Encoding: Binary");
@@ -184,6 +184,19 @@ class HttpResponse
         flush();
         ob_clean();
         exit();
+    }
+
+    public function HTTPToHTTPS()
+    {
+        if (
+            $_SERVER['HTTP_HOST'] != 'localhost' &&
+            (!(isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+                $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https'))) {
+            $location = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            header('HTTP/1.1 301 Moved Permanently');
+            header('Location: ' . $location);
+            exit;
+        }
     }
 
 }
